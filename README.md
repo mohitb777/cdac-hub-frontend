@@ -48,6 +48,8 @@ npm run dev
 
 Open `http://localhost:5173` in your browser.
 
+Contributor: Aditya Barakoti
+
 ### A Note on Logging In Locally
 
 Authentication is handled via Google OAuth2 on the backend. When you click "Login with Google", it briefly redirects to `localhost:8080` to authenticate with Google, grabs the JWT token, and bounces you back to the frontend `/auth/callback` route.
