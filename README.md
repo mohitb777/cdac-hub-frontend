@@ -48,7 +48,7 @@ npm run dev
 
 Open `http://localhost:5173` in your browser.
 
-Team Member : Shivani 
+ 
 
 ### A Note on Logging In Locally
 

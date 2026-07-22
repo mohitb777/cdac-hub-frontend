@@ -15,6 +15,7 @@ API.interceptors.request.use((config) => {
 
 // ─── Auth ─────────────────────────────────────────────
 // Get the currently logged in user's info
+
 export const getCurrentUser = () => API.get("/api/user/me");
 
 // ─── Public ───────────────────────────────────────────
@@ -31,6 +32,10 @@ export const submitProject = (formData) =>
   });
 
 export const getMyProjects = () => API.get("/api/student/projects/mine");
+
+// ─── Admin ───────────────────────────────────────────
+export const getAllUsers    = ()                   => API.get('/api/user/admin/users')
+export const updateUserRole = (userId, role)       => API.put(`/api/user/admin/users/${userId}/role`, { role })
 
 // ─── Reviewer ─────────────────────────────────────────
 export const getPendingProjects = () =>

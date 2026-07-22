@@ -2,7 +2,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 function Navbar() {
-  const { user, isLoggedIn, isReviewer, logout } = useAuth()
+  const { user, isLoggedIn, isReviewer, isAdmin, logout } = useAuth()
+//  const { user, isLoggedIn, isReviewer, logout } = useAuth()
   const navigate = useNavigate()
 
   return (
@@ -38,6 +39,14 @@ function Navbar() {
             </Link>
           </>
         )}
+
+        {/* Show Admin link only to ADMIN role */}
+      {isAdmin && (
+       <Link to="/admin"
+         className="text-sm text-violet-400 hover:text-violet-300 transition-colors font-medium">
+        Admin Panel
+      </Link>
+)}
 
         {/* Only show Reviewer link if user is REVIEWER or ADMIN */}
         {isReviewer && (
