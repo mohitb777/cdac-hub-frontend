@@ -109,6 +109,7 @@ function DashboardPage() {
                   <span className="text-xs text-white/30">{project.category}</span>
                   <span className="text-xs text-white/20">•</span>
                   <span className="text-xs text-white/30">{project.techStack}</span>
+                  <span className="text-xs text-white/30">{project.month} {project.year}</span>
                 </div>
               </div>
 

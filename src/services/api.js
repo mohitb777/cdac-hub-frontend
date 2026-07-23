@@ -37,6 +37,18 @@ export const getMyProjects = () => API.get("/api/student/projects/mine");
 export const getAllUsers    = ()                   => API.get('/api/user/admin/users')
 export const updateUserRole = (userId, role)       => API.put(`/api/user/admin/users/${userId}/role`, { role })
 
+// // If any request comes back 401 (expired/invalid token), auto-logout
+// API.interceptors.response.use(
+//   (response) => response,   // pass through successful responses
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       localStorage.removeItem('token')
+//       window.location.href = '/login'
+//     }
+//     return Promise.reject(error)
+//   }
+// )
+
 // ─── Reviewer ─────────────────────────────────────────
 export const getPendingProjects = () =>
   API.get("/api/reviewer/projects/pending");

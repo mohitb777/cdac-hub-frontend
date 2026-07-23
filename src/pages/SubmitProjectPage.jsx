@@ -9,6 +9,13 @@ const CATEGORIES = [
   'Data Science', 'Blockchain', 'IoT'
 ]
 
+const MONTHS = [
+  'January','February','March','April','May','June',
+  'July','August','September','October','November','December'
+]
+const currentYear = new Date().getFullYear()
+const YEARS = Array.from({ length: 6 }, (_, i) => currentYear - i) // adjust as needed
+
 function SubmitProjectPage() {
   const navigate           = useNavigate()
   const { isLoggedIn }     = useAuth()
@@ -23,6 +30,8 @@ function SubmitProjectPage() {
     techStack:   '',
     category:    'AI & ML',
     price:       '',
+    year:        new Date().getFullYear(),   // default current year
+    month:       '',
   })
 
   // Selected files
@@ -48,7 +57,7 @@ function SubmitProjectPage() {
     setError('')
 
     // Basic validation
-    if (!form.title || !form.description || !form.techStack || !form.price) {
+    if (!form.title || !form.description || !form.techStack || !form.price || !form.month) {
       setError('Please fill in all fields')
       return
     }
@@ -66,6 +75,8 @@ function SubmitProjectPage() {
     formData.append('techStack',   form.techStack)
     formData.append('category',    form.category)
     formData.append('price',       form.price)
+    formData.append('year',  form.year)
+    formData.append('month', form.month)
 
     // Append each file with the key "files"
     files.forEach(file => formData.append('files', file))
@@ -152,7 +163,37 @@ function SubmitProjectPage() {
               ))}
             </select>
           </div>
+                  {/* Year + Month row */}
+<div className="grid grid-cols-2 gap-4">
+  <div>
+    <label className="text-sm font-medium text-white/70 block mb-1.5">
+      Submission Year *
+    </label>
+    <select
+      name="year"
+      value={form.year}
+      onChange={handleChange}
+      className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all"
+    >
+      {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+    </select>
+  </div>
 
+  <div>
+    <label className="text-sm font-medium text-white/70 block mb-1.5">
+      Month *
+    </label>
+    <select
+      name="month"
+      value={form.month}
+      onChange={handleChange}
+      className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all"
+    >
+      <option value="">Select month</option>
+      {MONTHS.map(m => <option key={m} value={m}>{m}</option>)}
+    </select>
+  </div>
+</div>
           <div>
             <label className="text-sm font-medium text-white/70 block mb-1.5">
               Price (₹) *

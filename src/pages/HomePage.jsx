@@ -5,6 +5,11 @@ function HomePage() {
   const [projects, setProjects] = useState([])
   const [loading, setLoading]   = useState(true)
   const [search, setSearch]     = useState('')
+  const [yearFilter, setYearFilter] = useState('ALL')
+
+  // 👇 🆕 NEW DYNAMIC YEAR LOGIC 👇
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: 6 }, (_, i) => currentYear - i);
 
   useEffect(() => {
     getApprovedProjects()
@@ -13,11 +18,14 @@ function HomePage() {
   }, [])
 
   // Filter projects by search
-  const filtered = projects.filter(p =>
-    p.title.toLowerCase().includes(search.toLowerCase()) ||
-    p.category.toLowerCase().includes(search.toLowerCase()) ||
-    p.techStack.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = projects.filter(p => {
+    const matchesSearch =
+      p.title.toLowerCase().includes(search.toLowerCase()) ||
+      p.category.toLowerCase().includes(search.toLowerCase()) ||
+      p.techStack.toLowerCase().includes(search.toLowerCase())
+    const matchesYear = yearFilter === 'ALL' || p.year === Number(yearFilter)
+    return matchesSearch && matchesYear
+  })
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[60vh]">
@@ -46,6 +54,19 @@ function HomePage() {
           placeholder="Search by title, category, or tech stack..."
           className="w-full max-w-md mx-auto block bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-5 py-3 text-white text-sm outline-none transition-all"
         />
+        
+        {/* Year Filter moved up near search for better UI layout */}
+        <select
+          value={yearFilter}
+          onChange={e => setYearFilter(e.target.value)}
+          className="w-full max-w-md mx-auto block bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none mt-3 transition-all cursor-pointer"
+        >
+          <option value="ALL">All Years</option>
+          {/* 👇 🆕 MAPPED DYNAMIC YEARS 👇 */}
+          {yearOptions.map(y => (
+            <option key={y} value={y}>{y}</option>
+          ))}
+        </select>
       </div>
 
       {/* Projects Grid */}
@@ -67,14 +88,21 @@ function HomePage() {
           <div className="grid md:grid-cols-3 gap-4">
             {filtered.map(project => (
               <div key={project.id}
-                className="bg-[#0d0d18] border border-white/5 hover:border-violet-500/30 rounded-2xl p-5 transition-all cursor-pointer">
+                className="bg-[#0d0d18] border border-white/5 hover:border-violet-500/30 rounded-2xl p-5 transition-all cursor-pointer flex flex-col">
 
-                <span className="text-xs font-medium bg-violet-500/10 border border-violet-500/20 text-violet-300 px-3 py-1 rounded-full">
-                  {project.category}
-                </span>
+                <div className="flex justify-between items-start mb-3">
+                  <span className="text-xs font-medium bg-violet-500/10 border border-violet-500/20 text-violet-300 px-3 py-1 rounded-full">
+                    {project.category}
+                  </span>
+                  
+                  {/* 👇 🆕 DISPLAY MONTH AND YEAR ON CARD 👇 */}
+                  <span className="text-xs font-medium text-white/50 bg-white/5 px-2 py-1 rounded-md">
+                    {project.month} {project.year}
+                  </span>
+                </div>
 
-                <h3 className="font-bold mt-3 mb-2">{project.title}</h3>
-                <p className="text-white/40 text-sm mb-4 line-clamp-2">
+                <h3 className="font-bold mb-2">{project.title}</h3>
+                <p className="text-white/40 text-sm mb-4 line-clamp-2 flex-grow">
                   {project.description}
                 </p>
 
