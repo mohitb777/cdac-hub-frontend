@@ -113,12 +113,15 @@ function DashboardPage() {
                 </div>
               </div>
 
-              <div className="text-right ml-6">
-                <div className="font-bold text-white">₹{project.price}</div>
-                <div className="text-xs text-white/30 mt-1">
-                  {new Date(project.createdAt).toLocaleDateString()}
-                </div>
-              </div>
+             <div className="text-right ml-6">
+  <a href={project.gitLink} target="_blank" rel="noreferrer"
+    className="text-xs font-semibold text-violet-400 hover:text-violet-300 transition-colors">
+    View Repo →
+  </a>
+  <div className="text-xs text-white/30 mt-1">
+    {new Date(project.createdAt).toLocaleDateString()}
+  </div>
+</div>
             </div>
           ))}
         </div>

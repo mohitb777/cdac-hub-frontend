@@ -86,12 +86,15 @@ function ReviewerPage() {
                   <h3 className="font-bold text-lg mt-2">{project.title}</h3>
                   <p className="text-white/50 text-sm mt-1">{project.description}</p>
                 </div>
-                <div className="text-right ml-4 shrink-0">
-                  <div className="font-bold">₹{project.price}</div>
-                  <div className="text-xs text-white/30 mt-1">
-                    by {project.user?.name}
-                  </div>
-                </div>
+               <div className="text-right ml-4 shrink-0">
+  <a href={project.gitLink} target="_blank" rel="noreferrer"
+    className="text-xs font-semibold text-violet-400 hover:text-violet-300 transition-colors">
+    View Repo →
+  </a>
+  <div className="text-xs text-white/30 mt-1">
+    by {project.submitterName}
+  </div>
+</div>
               </div>
 
               {/* Tech stack */}
@@ -103,6 +106,19 @@ function ReviewerPage() {
                   </span>
                 ))}
               </div>
+
+
+
+                  <div className="text-xs text-white/40 mb-4 space-y-0.5">
+  <p>Guide: {project.guideName} ({project.guideEmail})</p>
+  {project.teamMembers?.length > 0 ? (
+    <p>Team: {project.teamMembers.map(m => `${m.name} (${m.rollNo})`).join(', ')}</p>
+  ) : (
+    <p>Solo project</p>
+  )}
+</div>
+
+
 
               {/* Files */}
               {project.files?.length > 0 && (
