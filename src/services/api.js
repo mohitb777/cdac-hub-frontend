@@ -37,6 +37,10 @@ export const getMyProjects = () => API.get("/api/student/projects/mine");
 export const getAllUsers    = ()                   => API.get('/api/user/admin/users')
 export const updateUserRole = (userId, role)       => API.put(`/api/user/admin/users/${userId}/role`, { role })
 
+// ─── Admin — Projects ─────────────────────────────────
+export const getAllProjectsAdmin = () => API.get('/api/admin/projects')
+export const deleteProject       = (projectId) => API.delete(`/api/admin/projects/${projectId}`)
+
 // // If any request comes back 401 (expired/invalid token), auto-logout
 // API.interceptors.response.use(
 //   (response) => response,   // pass through successful responses
