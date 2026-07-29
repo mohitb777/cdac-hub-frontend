@@ -37,6 +37,12 @@ export const getMyProjects = () => API.get("/api/student/projects/mine");
 export const getAllUsers    = ()                   => API.get('/api/user/admin/users')
 export const updateUserRole = (userId, role)       => API.put(`/api/user/admin/users/${userId}/role`, { role })
 
+//This is the new function to update specializations for a user by admin  
+export const updateSpecializations = (userId, specializations) =>
+  API.put(`/api/user/admin/users/${userId}/specializations`, {
+    specializations,
+  });
+
 // ─── Admin — Projects ─────────────────────────────────
 export const getAllProjectsAdmin = () => API.get('/api/admin/projects')
 export const deleteProject       = (projectId) => API.delete(`/api/admin/projects/${projectId}`)
