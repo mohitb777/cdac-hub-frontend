@@ -19,7 +19,8 @@ API.interceptors.request.use((config) => {
 export const getCurrentUser = () => API.get("/api/user/me");
 
 // ─── Public ───────────────────────────────────────────
-export const getApprovedProjects = () => API.get("/api/public/projects");
+export const getApprovedProjects = (page = 0) =>
+  API.get(`/api/public/projects?page=${page}&size=12`);
 
 export const getProjectReviews = (projectId) =>
   API.get(`/api/public/projects/${projectId}/reviews`);
@@ -72,5 +73,53 @@ export const submitReview = (projectId, data) => {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
 };
+
+
+//[ADDED / REPLACED HERE]: Active Refresh Token Response Interceptor
+// This replaces your old commented-out 401 block with the live logic
+// that silently refreshes expired tokens using the stored refreshToken.
+//
+
+
+let isRefreshing = false;
+
+API.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !isRefreshing
+    ) {
+      originalRequest._retry = true;
+      isRefreshing = true;
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      if (refreshToken) {
+        try {
+          const res = await axios.post(
+            "http://localhost:8080/api/auth/refresh",
+            { refreshToken },
+          );
+          localStorage.setItem("token", res.data.token);
+          isRefreshing = false;
+          originalRequest.headers.Authorization = `Bearer ${res.data.token}`;
+          return API(originalRequest);
+        } catch (refreshError) {
+          isRefreshing = false;
+          localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
+          window.location.href = "/login";
+          return Promise.reject(refreshError);
+        }
+      } else {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
+    }
+    return Promise.reject(error);
+  },
+);
 
 export default API;

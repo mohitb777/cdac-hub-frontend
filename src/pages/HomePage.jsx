@@ -16,11 +16,18 @@ function HomePage() {
   const [selectedProject, setSelectedProject] = useState(null)
   const { isLoggedIn } = useAuth()
 
-  useEffect(() => {
-    getApprovedProjects()
-      .then(res => { setProjects(res.data); setLoading(false) })
-      .catch(() => setLoading(false))
-  }, [])
+ const [page, setPage] = useState(0)
+const [totalPages, setTotalPages] = useState(1)
+
+useEffect(() => {
+  getApprovedProjects(page)
+    .then(res => {
+      setProjects(res.data.content)
+      setTotalPages(res.data.totalPages)
+      setLoading(false)
+    })
+    .catch(() => setLoading(false))
+}, [page])
 
   const filtered = projects.filter(p => {
     const matchesSearch =
@@ -103,6 +110,21 @@ function HomePage() {
           </div>
         )}
       </div>
+
+
+      {totalPages > 1 && (
+  <div className="flex justify-center gap-2 mt-8">
+    <button disabled={page === 0} onClick={() => setPage(p => p - 1)}
+      className="text-sm px-4 py-2 rounded-lg border border-white/10 disabled:opacity-30 text-white/60 hover:text-white">
+      ← Prev
+    </button>
+    <span className="text-sm text-white/40 px-2 py-2">Page {page + 1} of {totalPages}</span>
+    <button disabled={page >= totalPages - 1} onClick={() => setPage(p => p + 1)}
+      className="text-sm px-4 py-2 rounded-lg border border-white/10 disabled:opacity-30 text-white/60 hover:text-white">
+      Next →
+    </button>
+  </div>
+)}
 
       {showLoginModal && <LoginRequiredModal onClose={() => setShowLoginModal(false)} />}
       {selectedProject && <ProjectDetailModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
