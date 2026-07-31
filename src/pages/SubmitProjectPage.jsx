@@ -1,13 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { submitProject } from '../services/api'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { submitProject, resubmitProject } from '../services/api'
 import { useAuth } from '../context/AuthContext'
-
-const CATEGORIES = [
-  'AI & ML', 'Web Dev', 'Mobile Apps',
-  'Cybersecurity', 'Cloud & DevOps',
-  'Data Science', 'Blockchain', 'IoT'
-]
+import { CATEGORIES } from '../constants/categories'
 
 const MONTHS = [
   'January','February','March','April','May','June',
@@ -20,19 +15,37 @@ const MAX_TEAM_MEMBERS = 12
 
 function SubmitProjectPage() {
   const navigate = useNavigate()
+  
+  // CHANGED: Added location and editProject logic to detect if we are resubmitting
+  const location = useLocation()
+  const editProject = location.state?.editProject || null 
+  
   const { isLoggedIn, user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
+  // CHANGED: Initialized form state to pre-fill from editProject if it exists
   const [form, setForm] = useState({
-    title: '', description: '', techStack: '', category: 'AI & ML',
-    gitLink: '', year: currentYear, month: '',
-    submitterName: user?.name || '', submitterEmail: user?.email || '',
-    submitterRollNo: '', guideName: '', guideEmail: '',
+    title: editProject?.title || '',
+    description: editProject?.description || '',
+    techStack: editProject?.techStack || '',
+    category: editProject?.category || 'AI & ML',
+    gitLink: editProject?.gitLink || '',
+    year: editProject?.year || currentYear,
+    month: editProject?.month || '',
+    submitterName: editProject?.submitterName || user?.name || '',
+    submitterEmail: editProject?.submitterEmail || user?.email || '',
+    submitterRollNo: editProject?.submitterRollNo || '',
+    guideName: editProject?.guideName || '',
+    guideEmail: editProject?.guideEmail || '',
   })
 
-  const [teamMembers, setTeamMembers] = useState([])
+  // CHANGED: Initialized teamMembers to pre-fill from editProject if it exists
+  const [teamMembers, setTeamMembers] = useState(
+    editProject?.teamMembers?.map(m => ({ name: m.name, rollNo: m.rollNo, email: m.email })) || []
+  )
+  
   const [files, setFiles] = useState([])
 
   if (!isLoggedIn) {
@@ -70,9 +83,12 @@ function SubmitProjectPage() {
     if (!form.guideName || !form.guideEmail) {
       setError("Please fill in your guide's name and email"); return
     }
-    if (files.length === 0) {
+    
+    // CHANGED: Only require files if this is a brand-new submission, not an edit
+    if (!editProject && files.length === 0) {
       setError('Please attach at least one file'); return
     }
+    
     const incompleteRow = teamMembers.find(m => !m.name || !m.rollNo || !m.email)
     if (incompleteRow) {
       setError('Fill in all fields for each team member, or remove the empty row'); return
@@ -96,7 +112,12 @@ function SubmitProjectPage() {
     files.forEach(file => formData.append('files', file))
 
     try {
-      await submitProject(formData)
+      // CHANGED: Swapped which API call fires based on edit mode
+      if (editProject) {
+        await resubmitProject(editProject.id, formData)
+      } else {
+        await submitProject(formData)
+      }
       setSuccess(true)
       setTimeout(() => navigate('/dashboard'), 2000)
     } catch (err) {
@@ -109,7 +130,7 @@ function SubmitProjectPage() {
   if (success) return (
     <div className="flex items-center justify-center min-h-[60vh]">
       <div className="text-center">
-        <div className="text-5xl mb-4">✅</div>
+        <div className="text-5xl mb-4">✨</div>
         <h2 className="text-white text-xl font-bold">Project Submitted!</h2>
         <p className="text-white/40 mt-2">Redirecting to dashboard...</p>
       </div>
@@ -119,7 +140,10 @@ function SubmitProjectPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-10 text-white">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold">Submit Your Project</h1>
+        {/* CHANGED: Dynamic header text based on mode */}
+        <h1 className="text-2xl font-bold">
+          {editProject ? 'Fix & Resubmit Your Project' : 'Submit Your Project'}
+        </h1>
         <p className="text-white/40 text-sm mt-1">Open to all CDAC students — reviewed before publishing</p>
       </div>
 
@@ -286,7 +310,8 @@ function SubmitProjectPage() {
 
         <button type="submit" disabled={loading}
           className="w-full bg-violet-600 hover:bg-violet-500 disabled:bg-violet-600/50 disabled:cursor-not-allowed text-white font-semibold py-3.5 rounded-xl transition-all">
-          {loading ? 'Submitting...' : 'Submit Project for Review'}
+          {/* CHANGED: Dynamic button text based on mode */}
+          {loading ? 'Submitting...' : (editProject ? 'Resubmit for Review' : 'Submit Project for Review')}
         </button>
       </form>
     </div>

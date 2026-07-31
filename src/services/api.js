@@ -44,6 +44,13 @@ export const updateSpecializations = (userId, specializations) =>
     specializations,
   });
 
+
+export const resubmitProject = (projectId, formData) =>
+  API.put(`/api/student/projects/${projectId}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+
 // ─── Admin — Projects ─────────────────────────────────
 export const getAllProjectsAdmin = () => API.get('/api/admin/projects')
 export const deleteProject       = (projectId) => API.delete(`/api/admin/projects/${projectId}`)
