@@ -102,7 +102,7 @@ const { isLoggedIn, isReviewer, loading: authLoading } = useAuth()
         <div className="mb-6 p-3 bg-white/3 rounded-xl">
           <p className="text-xs text-white/40 mb-2">Files</p>
           {project.files.map((file, i) => (
-            <a key={i} href={`http://localhost:8080${file.fileUrl}`} target="_blank" rel="noreferrer"
+            <a key={i} href={`${import.meta.env.VITE_API_URL}${file.fileUrl}`} target="_blank" rel="noreferrer"
               className="flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300">
               📄 {file.fileName}
             </a>

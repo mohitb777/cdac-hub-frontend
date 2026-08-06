@@ -124,8 +124,7 @@ function ReviewerPage() {
                   <p className="text-xs text-white/40 mb-2">Submitted files:</p>
                   {project.files.map((file, i) => (
                     <a key={i}
-                      href={`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}${file.fileUrl}`}
-                      target="_blank"
+                  href={`${import.meta.env.VITE_API_URL}${file.fileUrl}`}                      target="_blank"
                       rel="noreferrer"
                       className="flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300 transition-colors"
                     >

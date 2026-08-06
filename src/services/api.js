@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "",
 });
 
 // Attach JWT token to every request automatically
@@ -111,23 +111,24 @@ API.interceptors.response.use(
       //  If a refresh is already in flight, every concurrent 401
       // awaits that SAME promise instead of racing to start its own —
       // this is what fixes the "second request just fails" bug.
-      if (!refreshPromise) {
-        refreshPromise = axios
-          .post("http://localhost:8080/api/auth/refresh", { refreshToken })
-          .then((res) => {
-            localStorage.setItem("token", res.data.token);
-            return res.data.token;
-          })
-          .catch((err) => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refreshToken");
-            window.location.href = "/login";
-            throw err;
-          })
-          .finally(() => {
-            refreshPromise = null;
-          });
-      }
+     if (!refreshPromise) {
+       refreshPromise = axios
+         // REMOVED http://localhost:8080 — Nginx handles it now!
+         .post("/api/auth/refresh", { refreshToken })
+         .then((res) => {
+           localStorage.setItem("token", res.data.token);
+           return res.data.token;
+         })
+         .catch((err) => {
+           localStorage.removeItem("token");
+           localStorage.removeItem("refreshToken");
+           window.location.href = "/login";
+           throw err;
+         })
+         .finally(() => {
+           refreshPromise = null;
+         });
+     }
 
       try {
         const newToken = await refreshPromise;
