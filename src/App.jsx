@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage'
 import SubmitProjectPage from './pages/SubmitProjectPage'
 import ReviewerPage from './pages/ReviewerPage'
 import AdminPage from './pages/AdminPage'
+import ReviewerProjectDetailPage from './pages/ReviewerProjectDetailPage'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/submit"        element={<SubmitProjectPage />} />
         <Route path="/reviewer"      element={<ReviewerPage />} />
         <Route path="/admin"         element={<AdminPage />} />
+        <Route path="/reviewer/projects/:id" element={<ReviewerProjectDetailPage />} />
       </Routes>
     </div>
   )

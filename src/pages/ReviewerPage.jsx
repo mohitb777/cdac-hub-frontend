@@ -4,13 +4,13 @@ import { getPendingProjects, submitReview } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 
 function ReviewerPage() {
-  const [projects, setProjects]   = useState([])
-  const [loading, setLoading]     = useState(true)
-  const [feedbacks, setFeedbacks] = useState({}) // { projectId: "feedback text" }
+  const [projects, setProjects]     = useState([])
+  const [loading, setLoading]       = useState(true)
+  const [feedbacks, setFeedbacks]   = useState({}) // { projectId: "feedback text" }
   const [submitting, setSubmitting] = useState({}) // { projectId: true/false }
-  const [done, setDone]           = useState({}) // { projectId: verdict }
-  const { isReviewer, isLoggedIn } = useAuth()
-  const navigate                  = useNavigate()
+  const [done, setDone]             = useState({}) // { projectId: verdict }
+  const { isReviewer, isLoggedIn }  = useAuth()
+  const navigate                    = useNavigate()
 
   useEffect(() => {
     if (!isLoggedIn) { navigate('/login'); return }
@@ -32,20 +32,22 @@ function ReviewerPage() {
   // Submit approve or reject
   const handleReview = async (projectId, verdict) => {
     const feedback = feedbacks[projectId] || ''
-    if (!feedback.trim()) {
-      alert('Please write feedback before submitting')
-      return
-    }
-
+    if (!feedback.trim()) { alert('Please write feedback before submitting'); return }
     setSubmitting({ ...submitting, [projectId]: true })
-
     try {
       await submitReview(projectId, { feedback, verdict })
-      // Mark this project as done and remove from list
       setDone({ ...done, [projectId]: verdict })
       setProjects(prev => prev.filter(p => p.id !== projectId))
     } catch (err) {
-      alert('Review submission failed. Try again.')
+      // This is Same race, same graceful handling — a reviewer working the
+      // list view deserves the same experience as one who followed
+      // an email link.
+      if (err.response?.status === 409) {
+        alert('This project was already reviewed by someone else — removing it from your queue.')
+        setProjects(prev => prev.filter(p => p.id !== projectId))
+      } else {
+        alert(err.response?.data?.error || 'Review submission failed. Try again.')
+      }
     } finally {
       setSubmitting({ ...submitting, [projectId]: false })
     }
@@ -86,15 +88,15 @@ function ReviewerPage() {
                   <h3 className="font-bold text-lg mt-2">{project.title}</h3>
                   <p className="text-white/50 text-sm mt-1">{project.description}</p>
                 </div>
-               <div className="text-right ml-4 shrink-0">
-  <a href={project.gitLink} target="_blank" rel="noreferrer"
-    className="text-xs font-semibold text-violet-400 hover:text-violet-300 transition-colors">
-    View Repo →
-  </a>
-  <div className="text-xs text-white/30 mt-1">
-    by {project.submitterName}
-  </div>
-</div>
+                <div className="text-right ml-4 shrink-0">
+                  <a href={project.gitLink} target="_blank" rel="noreferrer"
+                    className="text-xs font-semibold text-violet-400 hover:text-violet-300 transition-colors">
+                    View Repo →
+                  </a>
+                  <div className="text-xs text-white/30 mt-1">
+                    by {project.submitterName}
+                  </div>
+                </div>
               </div>
 
               {/* Tech stack */}
@@ -107,18 +109,14 @@ function ReviewerPage() {
                 ))}
               </div>
 
-
-
-                  <div className="text-xs text-white/40 mb-4 space-y-0.5">
-  <p>Guide: {project.guideName} ({project.guideEmail})</p>
-  {project.teamMembers?.length > 0 ? (
-    <p>Team: {project.teamMembers.map(m => `${m.name} (${m.rollNo})`).join(', ')}</p>
-  ) : (
-    <p>Solo project</p>
-  )}
-</div>
-
-
+              <div className="text-xs text-white/40 mb-4 space-y-0.5">
+                <p>Guide: {project.guideName} ({project.guideEmail})</p>
+                {project.teamMembers?.length > 0 ? (
+                  <p>Team: {project.teamMembers.map(m => `${m.name} (${m.rollNo})`).join(', ')}</p>
+                ) : (
+                  <p>Solo project</p>
+                )}
+              </div>
 
               {/* Files */}
               {project.files?.length > 0 && (
@@ -126,7 +124,7 @@ function ReviewerPage() {
                   <p className="text-xs text-white/40 mb-2">Submitted files:</p>
                   {project.files.map((file, i) => (
                     <a key={i}
-                      href={`http://localhost:8080${file.fileUrl}`}
+                      href={`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}${file.fileUrl}`}
                       target="_blank"
                       rel="noreferrer"
                       className="flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300 transition-colors"
