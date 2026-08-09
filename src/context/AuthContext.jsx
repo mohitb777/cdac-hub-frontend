@@ -24,11 +24,13 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+
   const logout = () => {
-    localStorage.removeItem('token')
-    setUser(null)
-    window.location.href = '/login'
-  }
+  localStorage.removeItem('token')
+  localStorage.removeItem('refreshToken')
+  setUser(null)
+  window.location.href = '/login'
+}
 
   const isLoggedIn = !!token
   const isAdmin    = user?.role === 'ADMIN'

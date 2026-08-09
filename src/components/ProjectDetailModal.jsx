@@ -53,7 +53,7 @@ function ProjectDetailModal({ project, onClose }) {
               {project.files.map((file, i) => (
                 <a
                   key={i}
-                  href={`http://localhost:8080${file.fileUrl}`}
+                  href={`${import.meta.env.VITE_API_URL}${file.fileUrl}`}
                   target="_blank"
                   rel="noreferrer"
                   download
