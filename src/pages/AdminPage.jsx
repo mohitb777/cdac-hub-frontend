@@ -10,10 +10,11 @@ const CATEGORIES = [
 ]
 function RoleBadge({ role }) {
   const styles = {
-    ADMIN:    'bg-violet-500/10 text-violet-400 border-violet-500/20',
-    REVIEWER: 'bg-blue-500/10   text-blue-400   border-blue-500/20',
-    STUDENT:  'bg-white/5       text-white/50   border-white/10',
-  }
+ADMIN:    'bg-cdac-navy/8 text-cdac-navy border-cdac-navy/20',
+  REVIEWER: 'bg-blue-50     text-blue-700   border-blue-200',
+  STUDENT:  'bg-gray-100    text-gray-600   border-gray-200',
+}
+
   return <span className={`text-xs font-medium border px-2 py-0.5 rounded-full ${styles[role]}`}>{role}</span>
 }
 

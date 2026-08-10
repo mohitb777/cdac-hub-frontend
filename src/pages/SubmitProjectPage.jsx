@@ -131,47 +131,47 @@ function SubmitProjectPage() {
     <div className="flex items-center justify-center min-h-[60vh]">
       <div className="text-center">
         <div className="text-5xl mb-4">✨</div>
-        <h2 className="text-white text-xl font-bold">Project Submitted!</h2>
-        <p className="text-white/40 mt-2">Redirecting to dashboard...</p>
+        <h2 className="text-brown-xl font-bold">Project Submitted!</h2>
+        <p className="text-black/40 mt-2">Redirecting to dashboard...</p>
       </div>
     </div>
   )
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-10 text-white">
+    <div className="max-w-2xl mx-auto px-6 py-10 text-black">
       <div className="mb-8">
         {/* CHANGED: Dynamic header text based on mode */}
         <h1 className="text-2xl font-bold">
           {editProject ? 'Fix & Resubmit Your Project' : 'Submit Your Project'}
         </h1>
-        <p className="text-white/40 text-sm mt-1">Open to all CDAC students — reviewed before publishing</p>
+        <p className="text-gray-500 text-sm mt-1">Open to all CDAC students — reviewed before publishing</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
 
         <div className="space-y-5">
-          <h3 className="text-sm font-bold text-white/40 uppercase tracking-wider">Project Details</h3>
+          <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Project Details</h3>
           <div>
-            <label className="text-sm font-medium text-white/70 block mb-1.5">Project Title *</label>
+            <label className="text-sm font-medium text-gray-500 block mb-1.5">Project Title *</label>
             <input type="text" name="title" value={form.title} onChange={handleChange}
               placeholder="e.g. Smart Attendance System"
               className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all" />
           </div>
           <div>
-            <label className="text-sm font-medium text-white/70 block mb-1.5">Description *</label>
+            <label className="text-sm font-medium text-gray-500 block mb-1.5">Description *</label>
             <textarea name="description" value={form.description} onChange={handleChange} rows={4}
               placeholder="Describe what your project does..."
               className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none resize-none transition-all" />
           </div>
           <div>
-            <label className="text-sm font-medium text-white/70 block mb-1.5">GitHub / GitLab Link *</label>
+            <label className="text-sm font-medium text-gray-500  block mb-1.5">GitHub / GitLab Link *</label>
             <input type="url" name="gitLink" value={form.gitLink} onChange={handleChange}
               placeholder="https://github.com/yourname/your-project"
               className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all" />
             <p className="text-xs text-white/30 mt-1.5">Repository must be public</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-white/70 block mb-1.5">Category *</label>
+            <label className="text-sm font-medium text-gray-500 block mb-1.5">Category *</label>
             <select name="category" value={form.category} onChange={handleChange}
               className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all">
               {CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
@@ -179,14 +179,14 @@ function SubmitProjectPage() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-white/70 block mb-1.5">Submission Year *</label>
+              <label className="text-sm font-medium text-gray-500 block mb-1.5">Submission Year *</label>
               <select name="year" value={form.year} onChange={handleChange}
                 className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all">
                 {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
               </select>
             </div>
             <div>
-              <label className="text-sm font-medium text-white/70 block mb-1.5">Month *</label>
+              <label className="text-sm font-medium text-gray-500 block mb-1.5">Month *</label>
               <select name="month" value={form.month} onChange={handleChange}
                 className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all">
                 <option value="">Select month</option>
@@ -195,7 +195,7 @@ function SubmitProjectPage() {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-white/70 block mb-1.5">Tech Stack * <span className="text-white/30">(comma separated)</span></label>
+            <label className="text-sm font-medium text-gray-500  block mb-1.5">Tech Stack * <span className="text-white/30">(comma separated)</span></label>
             <input type="text" name="techStack" value={form.techStack} onChange={handleChange}
               placeholder="e.g. Python, OpenCV, Flask, MySQL"
               className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all" />
@@ -203,22 +203,22 @@ function SubmitProjectPage() {
         </div>
 
         <div className="space-y-5">
-          <h3 className="text-sm font-bold text-white/40 uppercase tracking-wider">Submitted By (You)</h3>
+          <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Submitted By (You)</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-white/70 block mb-1.5">Your Name *</label>
+              <label className="text-sm font-medium text-gray-500 block mb-1.5">Your Name *</label>
               <input type="text" name="submitterName" value={form.submitterName} onChange={handleChange}
                 className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all" />
             </div>
             <div>
-              <label className="text-sm font-medium text-white/70 block mb-1.5">Your Roll No *</label>
+              <label className="text-sm font-medium text-gray-500  block mb-1.5">Your Roll No *</label>
               <input type="text" name="submitterRollNo" value={form.submitterRollNo} onChange={handleChange}
                 placeholder="e.g. DAC2401234"
                 className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all" />
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-white/70 block mb-1.5">Your Email *</label>
+            <label className="text-sm font-medium text-gray-500  block mb-1.5">Your Email *</label>
             <input type="email" name="submitterEmail" value={form.submitterEmail} onChange={handleChange}
               className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all" />
           </div>
@@ -226,7 +226,7 @@ function SubmitProjectPage() {
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-white/40 uppercase tracking-wider">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">
               Team Members <span className="normal-case font-normal">(optional — solo is fine)</span>
             </h3>
             <span className="text-xs text-white/30">{teamMembers.length}/{MAX_TEAM_MEMBERS}</span>
@@ -263,15 +263,15 @@ function SubmitProjectPage() {
         </div>
 
         <div className="space-y-5">
-          <h3 className="text-sm font-bold text-white/40 uppercase tracking-wider">Guided Under</h3>
+          <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider">Guided Under</h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-white/70 block mb-1.5">Guide Name *</label>
+              <label className="text-sm font-medium text-gray-500 block mb-1.5">Guide Name *</label>
               <input type="text" name="guideName" value={form.guideName} onChange={handleChange}
                 className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all" />
             </div>
             <div>
-              <label className="text-sm font-medium text-white/70 block mb-1.5">Guide Email *</label>
+              <label className="text-sm font-medium text-gray-500  block mb-1.5">Guide Email *</label>
               <input type="email" name="guideEmail" value={form.guideEmail} onChange={handleChange}
                 className="w-full bg-[#0d0d18] border border-white/10 focus:border-violet-500 rounded-xl px-4 py-3 text-white text-sm outline-none transition-all" />
             </div>
@@ -279,8 +279,8 @@ function SubmitProjectPage() {
         </div>
 
         <div>
-          <label className="text-sm font-medium text-white/70 block mb-1.5">
-            Project Files * <span className="text-white/30">(report, docs — code lives in your repo)</span>
+          <label className="text-sm font-medium text-gray-500 block mb-1.5">
+            Project Files * <span className="text-black-500/30">(report, docs — code lives in your repo)</span>
           </label>
           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/10 hover:border-violet-500/50 rounded-xl cursor-pointer transition-all bg-[#0d0d18]">
             <div className="text-center">
@@ -293,7 +293,7 @@ function SubmitProjectPage() {
           {files.length > 0 && (
             <div className="mt-2 space-y-1">
               {files.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs text-white/50">
+                <div key={i} className="flex items-center gap-2 text-xs text-black-500/40">
                   <span>📄</span><span>{f.name}</span>
                   <span className="text-white/20">({(f.size / 1024 / 1024).toFixed(2)} MB)</span>
                 </div>

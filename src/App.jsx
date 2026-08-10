@@ -11,7 +11,7 @@ import ReviewerProjectDetailPage from './pages/ReviewerProjectDetailPage'
 
 function App() {
   return (
-    <div className="bg-[#09090f] min-h-screen">
+    <div className="bg-[#f5f7fa] min-h-screen">
       {/* Navbar appears on every page */}
       <Navbar />
 

@@ -5,10 +5,10 @@ import { useAuth } from '../context/AuthContext'
 
 function StatusBadge({ status }) {
   const styles = {
-    PENDING:      'bg-yellow-500/10 text-yellow-400 border-yellow-500/20',
-    UNDER_REVIEW: 'bg-blue-500/10   text-blue-400   border-blue-500/20',
-    APPROVED:     'bg-green-500/10  text-green-400  border-green-500/20',
-    REJECTED:     'bg-red-500/10    text-red-400    border-red-500/20',
+    PENDING:      'bg-yellow-50 text-yellow-700 border-yellow-200',
+    UNDER_REVIEW: 'bg-blue-50   text-blue-700   border-blue-200',
+    APPROVED:     'bg-green-50   text-green-700   border-green-200',
+    REJECTED:     'bg-red-50     text-red-700     border-red-200',
   }
   return (
     <span className={`text-xs font-medium border px-2 py-0.5 rounded-full ${styles[status] || ''}`}>
@@ -30,11 +30,24 @@ function DashboardPage() {
   const navigate                = useNavigate()
 
   useEffect(() => {
-    if (!isLoggedIn) { navigate('/login'); return }
-    getMyProjects()
-      .then(res => { setProjects(res.data); setLoading(false) })
-      .catch(() => setLoading(false))
-  }, [isLoggedIn])
+  if (!isLoggedIn) {
+    navigate('/login')
+    return
+  }
+
+  getMyProjects()
+  .then(res => {
+    console.log("MY PROJECTS RESPONSE:", res.data);
+    setProjects(res.data);
+    setLoading(false);
+  })
+  .catch(err => {
+    console.error("MY PROJECTS ERROR:", err);
+    console.error("STATUS:", err.response?.status);
+    console.error("DATA:", err.response?.data);
+    setLoading(false);
+  });
+}, [isLoggedIn])
 
   const handleResubmit = (project) => {
     // Pass the existing project through router state — SubmitProjectPage
@@ -44,7 +57,7 @@ function DashboardPage() {
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <p className="text-white/40">Loading your projects...</p>
+      <p className="text-black/40">Loading your projects...</p>
     </div>
   )
 
@@ -52,8 +65,8 @@ function DashboardPage() {
     <div className="max-w-5xl mx-auto px-6 py-10 text-white">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold">My Dashboard</h1>
-          <p className="text-white/40 text-sm mt-1">Welcome back, {user?.name}</p>
+          <h1 className="text-black 2xl font-bold">My Dashboard</h1>
+          <p className="text-black text-sm mt-1">Welcome back, {user?.name}</p>
         </div>
         <button onClick={() => navigate('/submit')}
           className="bg-violet-600 hover:bg-violet-500 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-all">
@@ -79,7 +92,7 @@ function DashboardPage() {
         <div className="text-center py-20 border border-white/5 rounded-2xl">
           <p className="text-white/30 mb-4">No projects submitted yet</p>
           <button onClick={() => navigate('/submit')}
-            className="bg-violet-600 hover:bg-violet-500 text-white text-sm px-5 py-2.5 rounded-xl transition-all">
+            className="bg-violet-600 hover:bg-violet-500 text-black-bold text-sm px-5 py-2.5 rounded-xl transition-all">
             Submit Your First Project
           </button>
         </div>
@@ -95,7 +108,7 @@ function DashboardPage() {
                       <h3 className="font-semibold">{project.title}</h3>
                       <StatusBadge status={project.status} />
                     </div>
-                    <p className="text-white/40 text-sm line-clamp-1">{project.description}</p>
+                    <p className="text-black/40 text-sm line-clamp-1">{project.description}</p>
                     <div className="flex items-center gap-3 mt-2">
                       <span className="text-xs text-white/30">{project.category}</span>
                       <span className="text-xs text-white/20">•</span>
