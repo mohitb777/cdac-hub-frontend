@@ -1,8 +1,8 @@
 function LoginPage() {
-  const handleGoogleLogin = () => {
-    window.location.href =
-      "http://localhost:8080/oauth2/authorization/google"
-  }
+const handleGoogleLogin = () => {
+  window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
+
+};
 
   return (
     <div className="relative min-h-screen overflow-hidden flex items-center justify-center px-4">
